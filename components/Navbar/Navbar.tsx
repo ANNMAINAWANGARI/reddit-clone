@@ -2,6 +2,7 @@ import React from 'react';
 import { Flex, Spacer, Image, Text } from '@chakra-ui/react'
 import SearchInput from './SearchInput/SearchInput';
 import RightItem from './RightItem/RightItem';
+import AuthModal from '../Modals/AuthModal/AuthModal';
 type NavbarProps = {
     
 };
@@ -25,6 +26,7 @@ const Navbar:React.FC<NavbarProps> = () => {
                 <Text display={{ base: "none", md: "unset" }}>reddit</Text>
             </Flex>
             {/* <Directory/> */}
+            
             <SearchInput/>
             <RightItem/>
         </Flex>
