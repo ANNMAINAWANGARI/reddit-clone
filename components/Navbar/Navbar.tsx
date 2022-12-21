@@ -1,6 +1,7 @@
 import React from 'react';
 import { Flex, Spacer, Image, Text } from '@chakra-ui/react'
-import Logo from '../../images/logo.png'
+import SearchInput from './SearchInput/SearchInput';
+import RightItem from './RightItem/RightItem';
 type NavbarProps = {
     
 };
@@ -23,9 +24,9 @@ const Navbar:React.FC<NavbarProps> = () => {
                 
                 <Text display={{ base: "none", md: "unset" }}>reddit</Text>
             </Flex>
-            {/* <Directory/>
+            {/* <Directory/> */}
             <SearchInput/>
-            <RightItem/> */}
+            <RightItem/>
         </Flex>
     )
 }
