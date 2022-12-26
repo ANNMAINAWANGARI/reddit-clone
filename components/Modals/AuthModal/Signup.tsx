@@ -3,18 +3,27 @@ import React , {useState} from 'react';
 import { Button, Flex, Text, Input } from "@chakra-ui/react";
 import { useSetRecoilState } from 'recoil';
 import { authModalState } from '../../../state/atoms/AuthModalAtom';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { auth } from '../../../firebase/clientApp';
+
 
 type SignupProps = {
     
 };
 
 const Signup:React.FC<SignupProps> = () => {
-    const [signupForm, setSignupForm] = useState({
-        email:'',
-        password:'',
-        confirmPassword: "",
-    })
-    const submit = ()=>{}
+    const [signupForm, setSignupForm] = useState({ email:'', password:'', confirmPassword: "", })
+    const [createUserWithEmailAndPassword,user,loading,error,] = useCreateUserWithEmailAndPassword(auth);
+    const [formError,setFormError]= useState('');
+    const submit = (e:React.FormEvent<HTMLFormElement>)=>{
+      e.preventDefault();
+      if (error) setFormError('');
+      if (signupForm.password !== signupForm.confirmPassword){
+        setFormError('Passwords do not match')
+        return;
+      }
+      createUserWithEmailAndPassword(signupForm.email, signupForm.password)
+    }
     const setAuthModalState = useSetRecoilState(authModalState)
     const onChange = (e:React.ChangeEvent<HTMLInputElement>)=>{
         setSignupForm(prev =>({
@@ -61,14 +70,16 @@ const Signup:React.FC<SignupProps> = () => {
                 _focus={{outline:'none',bg:'white',border:'1px solid',borderColor:'blue.500'}}
                 bg='gray.50'
       />
+      {formError && <p style={{color:'red',display:'flex',alignItems:'center',justifyContent:'center'}}>{formError}</p>}
             <Button
                 width="100%"
                 height="36px"
                 mb={2}
                 mt={2}
+                isLoading={loading}
                 type="submit"
       >
-               Log In
+               Sign Up
       </Button>
       <Flex fontSize="9pt" justifyContent="center">
         <Text mr={1}>Have an account?</Text>
