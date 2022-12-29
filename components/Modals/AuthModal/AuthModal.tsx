@@ -2,22 +2,28 @@ import {
     Button, Flex, Modal, ModalBody,
     ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {useRecoilState} from 'recoil';
 import { authModalState } from '../../../state/atoms/AuthModalAtom';
 import AuthInputs from './AuthInputs';
 import AuthButtons from './AuthButtons';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import {auth} from '../../../firebase/clientApp';
 type AuthModalProps = {
     
 };
 
 const AuthModal:React.FC<AuthModalProps> = () => {
     const [modalState, setModalState] = useRecoilState(authModalState);
+    const [user, loading, error] = useAuthState(auth);
     const handleClose = () =>
     setModalState((prev) => ({
       ...prev,
       open: false,
     }));
+    useEffect(()=>{
+      if(user)handleClose()
+    },[user])
     return (
          <>
 
