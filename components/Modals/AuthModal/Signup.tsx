@@ -5,6 +5,7 @@ import { useSetRecoilState } from 'recoil';
 import { authModalState } from '../../../state/atoms/AuthModalAtom';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { auth } from '../../../firebase/clientApp';
+import {FIREBASE_ERRORS} from '../../../firebase/errors'
 
 
 type SignupProps = {
@@ -70,7 +71,7 @@ const Signup:React.FC<SignupProps> = () => {
                 _focus={{outline:'none',bg:'white',border:'1px solid',borderColor:'blue.500'}}
                 bg='gray.50'
       />
-      {formError && <p style={{color:'red',display:'flex',alignItems:'center',justifyContent:'center'}}>{formError}</p>}
+      {formError || error && <p style={{color:'red',display:'flex',alignItems:'center',justifyContent:'center'}}>{formError|| FIREBASE_ERRORS[error?.message as keyof typeof FIREBASE_ERRORS]}</p>}
             <Button
                 width="100%"
                 height="36px"
