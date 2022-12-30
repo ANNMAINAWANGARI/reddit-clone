@@ -1,5 +1,5 @@
 import {
-    Button, Flex, Modal, ModalBody,
+    Button, Flex, Text, Modal, ModalBody,
     ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure
 } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
@@ -9,6 +9,7 @@ import AuthInputs from './AuthInputs';
 import AuthButtons from './AuthButtons';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import {auth} from '../../../firebase/clientApp';
+import ResetPassword from './ResetPassword';
 type AuthModalProps = {
     
 };
@@ -47,9 +48,14 @@ const AuthModal:React.FC<AuthModalProps> = () => {
                       alignItems="center"
                       justifyContent="center"
                       width="70%">
-              <AuthButtons/>
-              <AuthInputs/>
-              {/* <ResetPassword/> */}
+                        {modalState.view ==='login' || modalState.view ==='signup' ?
+                        <>
+                        <AuthButtons/>
+                        <Text color='gray.500' fontWeight='700'>OR</Text>
+                        <AuthInputs/>
+                        </>
+                        :<ResetPassword/>}
+              
             </Flex>
           </ModalBody>
         </ModalContent>

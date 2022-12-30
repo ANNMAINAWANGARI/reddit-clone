@@ -72,7 +72,13 @@ const [formError,setFormError]= useState('');
           fontSize="9pt"
           color="blue.500"
           cursor="pointer"
-          onClick={() => {}}
+          onClick={() => {
+            setAuthModalState((prev)=>({
+             ...prev,
+             view:'resetPassword'
+            }
+            ))
+          }}
         >
           Reset
         </Text>
