@@ -6,6 +6,7 @@ import AuthModal from '../../Modals/AuthModal/AuthModal';
 import { signOut, User } from 'firebase/auth';
 import {auth} from '../../../firebase/clientApp';
 import Icons from './Icons';
+import UserMenu from './UserMenu';
 
 type RightItemProps = {
     user ?:User | null;
@@ -17,9 +18,9 @@ const RightItem:React.FC<RightItemProps> = ({user}) => {
         <>
       <AuthModal />
       <Flex justifyContent="space-between" alignItems="center">
-        {/* {user ? <Button onClick={()=>signOut(auth)}>Logout</Button>: <AuthButtons />} */}
         {user ? <Icons/>: <AuthButtons />}
-        {/* <MenuWrapper /> */}
+        
+        <UserMenu user={user}/>
       </Flex>
     </>
     )
