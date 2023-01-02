@@ -2,7 +2,7 @@ import React from 'react';
 import { Flex, Spacer, Image, Text } from '@chakra-ui/react'
 import SearchInput from './SearchInput/SearchInput';
 import RightItem from './RightItem/RightItem';
-
+import Directory from './Directory/Directory'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import {auth} from '../../firebase/clientApp';
 type NavbarProps = {
@@ -27,9 +27,9 @@ const Navbar:React.FC<NavbarProps> = () => {
                 
                 <Text display={{ base: "none", md: "unset" }}>reddit</Text>
             </Flex>
-            {/* <Directory/> */}
+            {user && <Directory/>}
             
-            <SearchInput/>
+            <SearchInput user={user}/>
             <RightItem user={user}/>
         </Flex>
     )
