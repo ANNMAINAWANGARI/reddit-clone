@@ -18,6 +18,9 @@ import {
     Icon,
   } from '@chakra-ui/react'
 import { BsFillPersonFill } from 'react-icons/bs';
+import { doc, getDoc, runTransaction, serverTimestamp, setDoc } from "firebase/firestore";
+import { auth, firestore } from '../../../firebase/clientApp';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 type CreateCommunityProps = {
     open:boolean,
@@ -29,6 +32,8 @@ const CreateCommunity:React.FC<CreateCommunityProps> = ({open, handleClose}) => 
     const [charsRemaining,setCharsRemaining]= useState(21)
     const [communityType,setCommunityType] = useState('public')
     const [loading, setLoading] = useState(false);
+    const [error,setError] = useState('')
+    const [user] = useAuthState(auth)
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>)=>{
         if (event.target.value.length > 21) return;
         setCommunityName(event.target.value);
@@ -39,7 +44,41 @@ const CreateCommunity:React.FC<CreateCommunityProps> = ({open, handleClose}) => 
       if (name === communityType) return;
        setCommunityType(name);
     }
-const handleCreateCommunity = ()=>{}
+const handleCreateCommunity = async()=>{
+  const format = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/;
+
+  if (format.test(communityName) || communityName.length < 3) {
+  setError(
+      "Community names must be between 3–21 characters, and can only contain letters, numbers, or underscores."
+    );
+    return;
+  }
+  setLoading(true)
+try{
+  const communityDocRef = doc(firestore, 'communities',communityName)
+  const communityDocSnap = await getDoc(communityDocRef)
+
+  if(communityDocSnap.exists()){
+    throw new Error(`Sorry, r/${communityName} is already taken. Try another`)
+  
+   
+  }
+  await setDoc(communityDocRef,{
+    creatorId:user?.uid,
+    createdAt:serverTimestamp(),
+    numberOfMembers:1,
+    privacyType:communityType
+  })
+}catch(error:any){
+  console.log('handleCreateCommunityError',error?.message)
+  setError(error?.message)
+}
+
+
+
+ 
+  setLoading(false)
+}
     return (
         <>
         
@@ -66,6 +105,7 @@ const handleCreateCommunity = ()=>{}
                  />
                  <Text fontSize="9pt" color={charsRemaining === 0 ? "red" : "gray.500"}>{charsRemaining} characers remaining</Text>
                  <Box mt={4} mb={4}>
+                  {error && <Text fontSize="9pt" color="red" pt={1}> {error} </Text>}
                   <Text fontWeight={600} fontSize={15}>Community Type</Text>
                   <Stack spacing={2} pt={1}>
                    <Checkbox colorScheme="blue"name="public"isChecked={communityType === "public"}onChange={onCommunityTypeChange}>
