@@ -45,6 +45,7 @@ const CreateCommunity:React.FC<CreateCommunityProps> = ({open, handleClose}) => 
        setCommunityType(name);
     }
 const handleCreateCommunity = async()=>{
+  if(error)setError('')
   const format = /[ `!@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?~]/;
 
   if (format.test(communityName) || communityName.length < 3) {
