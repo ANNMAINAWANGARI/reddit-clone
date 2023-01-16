@@ -57,19 +57,24 @@ const handleCreateCommunity = async()=>{
   setLoading(true)
 try{
   const communityDocRef = doc(firestore, 'communities',communityName)
-  const communityDocSnap = await getDoc(communityDocRef)
-
-  if(communityDocSnap.exists()){
-    throw new Error(`Sorry, r/${communityName} is already taken. Try another`)
-  
-   
-  }
-  await setDoc(communityDocRef,{
-    creatorId:user?.uid,
-    createdAt:serverTimestamp(),
-    numberOfMembers:1,
-    privacyType:communityType
+  await runTransaction(firestore,async(transaction)=>{
+    const communityDocSnap = await transaction.get(communityDocRef)
+    if(communityDocSnap.exists()){
+      throw new Error(`Sorry, r/${communityName} is already taken. Try another`)
+     
+    }
+    await transaction.set(communityDocRef,{
+      creatorId:user?.uid,
+      createdAt:serverTimestamp(),
+      numberOfMembers:1,
+      privacyType:communityType
+    })
+    transaction.set(doc(firestore,`users/${user?.uid}/communitySnippets`,communityName),{
+      communityId:communityName,
+      isModerator:true
+    })
   })
+ 
 }catch(error:any){
   console.log('handleCreateCommunityError',error?.message)
   setError(error?.message)
