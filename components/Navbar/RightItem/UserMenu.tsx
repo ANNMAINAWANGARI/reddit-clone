@@ -23,14 +23,17 @@ import { MdOutlineLogin } from "react-icons/md";
 import { auth } from '../../../firebase/clientApp';
 import { useSetRecoilState } from 'recoil';
 import { authModalState } from '../../../state/atoms/AuthModalAtom';
+import { communityState } from '../../../state/atoms/CommunitiesAtom';
 
 type UserMenuProps = {
     user?:User | null
 };
 
 const UserMenu:React.FC<UserMenuProps> = ({user}) => {
+  const resetCommunityState = useSetRecoilState(communityState)
     const logOut = ()=>{
         signOut(auth)
+        resetCommunityState()
     }
     const setAuthModalState = useSetRecoilState(authModalState)
     return (
