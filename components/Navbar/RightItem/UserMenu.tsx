@@ -21,19 +21,22 @@ import { IoSparkles } from "react-icons/io5";
 import {CgLogOut, CgProfile} from 'react-icons/cg';
 import { MdOutlineLogin } from "react-icons/md";
 import { auth } from '../../../firebase/clientApp';
-import { useSetRecoilState } from 'recoil';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
 import { authModalState } from '../../../state/atoms/AuthModalAtom';
 import { communityState } from '../../../state/atoms/CommunitiesAtom';
+import {useRouter} from 'next/router'
 
 type UserMenuProps = {
     user?:User | null
 };
 
 const UserMenu:React.FC<UserMenuProps> = ({user}) => {
-  const resetCommunityState = useSetRecoilState(communityState)
+  const router = useRouter()
+  const resetCommunityState = useResetRecoilState(communityState)
     const logOut = ()=>{
-        signOut(auth)
+        signOut(auth);
         resetCommunityState()
+        router.push('/')
     }
     const setAuthModalState = useSetRecoilState(authModalState)
     return (
