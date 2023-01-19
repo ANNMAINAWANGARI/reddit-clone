@@ -29,6 +29,7 @@ const useCommunityData = () => {
           ...prev,
           mySnippets:[...prev.mySnippets,newSnippet]
         }))
+        setLoading(false)
       }catch(error:any){
         setError(error.message)
       }
