@@ -1,3 +1,17 @@
+## Technologies Used
+
+-React
+-Hooks(Global & Custom Hooks)
+-NextJS
+-Recoil(State Management)
+-Firebase
+-Transactions and Batched Writes
+-Firestore Queries
+-Firebase Firestore
+-Firebase Storage
+-Cloud Functions
+-Firebase Authentication(Email & Password, Google Auth, Twitter Auth)
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
