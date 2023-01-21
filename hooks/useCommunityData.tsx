@@ -29,10 +29,12 @@ const useCommunityData = () => {
           ...prev,
           mySnippets:[...prev.mySnippets,newSnippet]
         }))
-        setLoading(false)
+        console.log('joinCommunity',communityStateValue)
+        
       }catch(error:any){
         setError(error.message)
       }
+      setLoading(false)
     }
     const leaveCommunity = async (communityId:string)=>{
       try{
@@ -76,15 +78,17 @@ const useCommunityData = () => {
                 ...prev,
                 mySnippets:snippets as CommunitySnippet[]
             }))
-            setLoading(false)
+            // setLoading(false)
         }catch(error:any){
           setError(error)
          console.log('getMySnippetDataError',error)
         }
+        setLoading(false)
     }
     useEffect(()=>{
-     if(!user) return;
+     if(!user || !!communityStateValue.mySnippets.length) return;
      getMySnippets()
+     console.log('user',user)
     },[user])
     return {
         onJoinOrLeaveCommunity,
