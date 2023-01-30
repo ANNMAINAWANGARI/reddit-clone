@@ -1,5 +1,7 @@
 import React,{useState} from 'react';
 import {
+  Alert,
+    AlertIcon,
     Flex,
     Icon,
     Image,
@@ -24,13 +26,14 @@ import { Post } from '../../state/atoms/PostAtom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../firebase/clientApp';
 import moment from 'moment'
+import { setDefaultResultOrder } from 'dns';
 
 type PostItemProps = {
     post:Post;
     userIsCreator:boolean;
     userVoteValue?:number;
     onVote:()=>{};
-    onDelete:()=>{};
+    onDelete:(post:Post)=>Promise<boolean>;
     onSelectPost:()=>void;
 };
 
@@ -46,7 +49,19 @@ const PostItem:React.FC<PostItemProps> = (
     // console.log(post,'post')
     const [loadingImage, setLoadingImage] = useState(true);
     const [loadingDelete, setLoadingDelete] = useState(false);
-    const handleDelete = ()=>{}
+    const [error,setError] = useState('')
+    const handleDelete = async()=>{
+      try{
+        setLoadingDelete(true)
+        const success = await onDelete(post)
+        if (!success) throw new Error("Failed to delete post");
+      }catch(error:any){
+        console.log('handleDeleteError',error.message)
+        setError(error.message)
+        
+      }
+      setLoadingDelete(false)
+    }
     
     return (
         <Flex       
@@ -79,6 +94,12 @@ const PostItem:React.FC<PostItemProps> = (
         />
              </Flex>
              <Flex direction="column" width="100%">
+             {error && 
+              <Alert status='error'>
+               <AlertIcon/>
+               <Text mr={2}>Error Deleting Post</Text>
+              </Alert>
+             }
                 
                 <Stack spacing={1} p="10px 10px">
                     <Stack direction='row' spacing={0.6} align="center" fontSize="9pt">
