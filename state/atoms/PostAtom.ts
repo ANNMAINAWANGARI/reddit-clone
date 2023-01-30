@@ -7,7 +7,7 @@ communityId:string;
 creatorId:string;
 creatorDisplayName:string;
 title:string;
-body:string;
+body?:string;
 numberOfComments:number;
 voteStatus:number;
 imageURL?:string;

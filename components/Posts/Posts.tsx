@@ -8,6 +8,7 @@ import usePosts from '../../hooks/usePosts';
 import { Community } from '../../state/atoms/CommunitiesAtom';
 import { Post } from '../../state/atoms/PostAtom';
 import PostItem from './PostItem';
+import PostLoader from './PostLoader';
 
 type PostsProps = {
     communityData: Community;
@@ -33,7 +34,7 @@ const Posts:React.FC<PostsProps> = ({communityData}) => {
                 ...prev,
                 posts:posts as Post[]
               }))
-              console.log('posst',posts)
+            //   console.log('posst',posts)
         }catch(error:any){
             console.log('getPostsError',error.message)
             setError(true)
@@ -47,7 +48,10 @@ const Posts:React.FC<PostsProps> = ({communityData}) => {
     
     return (
         <>
-        {loading?(<></>)
+        {loading?(
+        <>
+        <PostLoader/>
+        </>)
         :(
         <Stack>
          {postStateValue.posts.map((post: Post, index)=>(

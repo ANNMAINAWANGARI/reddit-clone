@@ -20,7 +20,7 @@ const useCommunityData = () => {
           communityId:communityData.id,
           imageURL:communityData.imageURL || ""
         }
-        batch.set(doc(firestore,`users/${user?.uid}/ communitySnippets`,communityData.id),newSnippet)
+        batch.set(doc(firestore,`users/${user?.uid}/communitySnippets`,communityData.id),newSnippet)
         batch.update(doc(firestore,'communities',communityData.id),{
           numberOfMembers:increment(1)
         })
@@ -62,9 +62,11 @@ const useCommunityData = () => {
       }
       setLoading(true)
       if(isJoined){
+        alert('Leaving Community')
         leaveCommunity(communityData.id)
        return;
       }
+      alert('Joining Community')
       joinCommunity(communityData)
     }
     const getMySnippets = async()=>{
@@ -86,9 +88,10 @@ const useCommunityData = () => {
         setLoading(false)
     }
     useEffect(()=>{
-     if(!user || !!communityStateValue.mySnippets.length) return;
+     if(!user) return;
      getMySnippets()
      console.log('user',user)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[user])
     return {
         onJoinOrLeaveCommunity,
